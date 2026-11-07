@@ -44,6 +44,7 @@ module.exports = (sequelize, DataTypes) => {
       status: {
         type: DataTypes.ENUM('Active', 'Suspended', 'Banned'),
         allowNull: false,
+        defaultValue: 'Active'
       },
       phone_number: {
         type: DataTypes.STRING,

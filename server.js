@@ -1,11 +1,13 @@
 require('dotenv').config();
 const express =require ('express');
 const sequelize = require('./database/database.js')
+const memberRouter = require('./routes/memberRouter.js');
 const PORT = process.env.PORT
 
 const app = express();
 
 app.use(express.json())
+app.use('/members', memberRouter);
 
 
 const connectToDB = async(req, res)=>{

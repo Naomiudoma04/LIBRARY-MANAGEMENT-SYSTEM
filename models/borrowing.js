@@ -58,6 +58,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.DATE
       },
+      returned_date: {
+        allowNull: true,
+        type: DataTypes.DATE
+      },
       createdAt: {
         allowNull: false,
         type: DataTypes.DATE
@@ -65,7 +69,8 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: {
         allowNull: false,
         type: DataTypes.DATE
-      }, 
+      }
+  }, {
     sequelize,
     modelName: 'borrowing',
     tableName: 'borrowings',
