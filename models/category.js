@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       description: {
         type: DataTypes.TEXT,
-        allowNull: false
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
@@ -36,7 +36,8 @@ module.exports = (sequelize, DataTypes) => {
       updatedAt: {
         allowNull: false,
         type: DataTypes.DATE
-      }, 
+      }
+  }, {
     sequelize,
     modelName: 'category',
     tableName: 'categories',
