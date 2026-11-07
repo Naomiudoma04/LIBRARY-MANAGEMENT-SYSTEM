@@ -37,10 +37,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.DATE
       }, 
-    sequelize,
+  
+  { sequelize,
     modelName: 'category',
     tableName: 'categories',
     timestamps: true
-  });
+    }
   return category;
 };
