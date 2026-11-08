@@ -7,11 +7,15 @@ const {
     updateBorrowing,
     deleteBorrowing
 } = require('../controllers/borrowingController');
+const {
+    createBorrowingValidation,
+    updateBorrowingValidation
+} = require('../middlewares/borrowingValidation');
 
-router.post('/createBorrowing', createBorrowing);
+router.post('/createBorrowing', createBorrowingValidation, createBorrowing);
 router.get('/allBorrowings', getAllBorrowings);
 router.get('/:id', getBorrowingById);
-router.put('/:id', updateBorrowing);
+router.put('/:id', updateBorrowingValidation, updateBorrowing);
 router.delete('/:id', deleteBorrowing);
 
 module.exports = router;

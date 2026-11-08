@@ -23,13 +23,5 @@
     "nodemon": "^3.1.14",
     "sequelize": "^6.37.8",
     "sequelize-cli": "^6.6.5"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Naomiudoma04/LIBRARY-MANAGEMENT-SYSTEM.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Naomiudoma04/LIBRARY-MANAGEMENT-SYSTEM/issues"
-  },
-  "homepage": "https://github.com/Naomiudoma04/LIBRARY-MANAGEMENT-SYSTEM#readme"
+  }
 }

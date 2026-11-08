@@ -13,8 +13,8 @@ const {
 
 router.post('/createMember', createLibraryMemberValidation, libraryMember);
 router.get('/allMembers', getAllMembers);
-router.get('/:id', getOneMember);
-router.put('/:id', updateLibraryMemberValidation, updateAMember);
-router.delete('/:id', deleteMember);
+router.get('/get/:id', getOneMember);
+router.put('/update/:id', updateLibraryMemberValidation, updateAMember);
+router.delete('/delete/:id', deleteMember);
 
 module.exports = router;
