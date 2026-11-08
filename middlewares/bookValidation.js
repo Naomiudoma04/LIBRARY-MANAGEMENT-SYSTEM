@@ -4,6 +4,15 @@ const Joi = require("joi");
 // CREATE BOOK VALIDATION
 const createBookValidation = (req, res, next) => {
    const schema = Joi.object({
+      title: Joi.string()
+         .trim()
+         .min(1)
+         .required()
+         .messages({
+            "any.required": "Book title is required.",
+            "string.empty": "Book title cannot be empty.",
+         }),
+
       author: Joi.string()
          .trim()
          .pattern(/^[A-Za-z .'-]+$/)
