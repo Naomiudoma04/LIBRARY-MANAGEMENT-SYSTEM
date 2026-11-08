@@ -1,5 +1,4 @@
-
-const { libraryMember, borrowing, book } = require('../models');
+const { libraryMember } = require('../models');
 
 const toTitleCase = (str) => {
   if (!str) return '';
@@ -39,12 +38,12 @@ exports.libraryMember = async (req, res) => {
       membership_date: new Date()
     });
 
-    res.status(201).json({
+     res.status(201).json({
       message: 'Member created successfully',
       data: newMember
     });
   } catch (error) {
-    res.status(500).json({
+     res.status(500).json({
       message: error.message
     });
   }
@@ -70,16 +69,7 @@ exports.getAllMembers = async (req, res) => {
 exports.updateAMember = async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      first_name,
-      last_name,
-      email,
-      gender,
-      phone_number,
-      password,
-      address
-    } = req.body;
-
+    const {first_name, last_name, email, gender, phone_number, password, address} = req.body
     const member = await libraryMember.findByPk(id);
 
     if (!member) {
@@ -87,7 +77,7 @@ exports.updateAMember = async (req, res) => {
         message: 'Member not found'
       });
     }
-
+    
     const updatedMember = await member.update({
       first_name: toTitleCase(first_name),
       last_name: toTitleCase(last_name),
@@ -103,7 +93,7 @@ exports.updateAMember = async (req, res) => {
       data: updatedMember
     });
   } catch (error) {
-    res.status(500).json({
+     res.status(500).json({
       message: error.message
     });
   }
@@ -112,7 +102,6 @@ exports.updateAMember = async (req, res) => {
 exports.getOneMember = async (req, res) => {
   try {
     const { id } = req.params;
-
     const member = await libraryMember.findByPk(id, {
       attributes: { exclude: ['password'] }
     });
@@ -128,63 +117,28 @@ exports.getOneMember = async (req, res) => {
       data: member
     });
   } catch (error) {
-    res.status(500).json({
+     res.status(500).json({
       message: error.message
     });
   }
 };
 
-exports.deleteMember = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const member = await libraryMember.findByPk(id);
-
-    if (!member) {
-      return res.status(404).json({
-        message: 'Member not found'
+exports.deleteMember = async(req, res)=> {
+    try {
+     const { id } = req.params;
+     const member = await libraryMember.findByPk(id);
+     if (!member) {
+         return res.status(404).json({
+          message: 'Member not found'
       });
     }
-
-    await member.destroy();
-
-    res.status(200).json({
-      message: 'Library member deleted successfully'
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: error.message
-    });
-  }
-};
-
-exports.getMemberBorrowingHistory = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const member = await libraryMember.findByPk(id);
-
-    if (!member) {
-      return res.status(404).json({
-        message: 'Member not found'
-      });
+     await member.destroy()
+       res.status(200).json({
+            message: 'Library member deleted successfully',
+            });
+    } catch (error) {
+       res.status(500).json({
+        message: error.message
+       });
     }
-
-    const history = await borrowing.findAll({
-      where: { libraryMember_id: id },
-      include: [{
-        model: book,
-        as: 'book'
-      }]
-    });
-
-    return res.status(200).json({
-      message: 'Member borrowing history retrieved successfully',
-      data: history
-    });
-
-  } catch (error) {
-    return res.status(500).json({
-      message: error.message
-    });
-  }
-};
+}

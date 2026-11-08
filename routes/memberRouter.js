@@ -1,23 +1,20 @@
-
 const router = require('express').Router();
-
 const {
-    libraryMember,
-    getAllMembers,
-    updateAMember,
-    getOneMember,
-    deleteMember,
-    getMemberBorrowingHistory
-} = require('../controllers/memberController');
+  libraryMember,
+  getAllMembers,
+  getOneMember,
+  updateAMember,
+  deleteMember
+} = require('../controllers/libraryMemberController.js');
+const {
+  createLibraryMemberValidation,
+  updateLibraryMemberValidation
+} = require('../middlewares/libraryMemberValidation.js');
 
-router.post('/createMember', libraryMember);
+router.post('/createMember', createLibraryMemberValidation, libraryMember);
 router.get('/allMembers', getAllMembers);
-
-// Put the borrowing history route before the general member ID route
-router.get('/:id/borrowingHistory', getMemberBorrowingHistory);
-
 router.get('/:id', getOneMember);
-router.put('/:id', updateAMember);
+router.put('/:id', updateLibraryMemberValidation, updateAMember);
 router.delete('/:id', deleteMember);
 
 module.exports = router;

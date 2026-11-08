@@ -1,4 +1,3 @@
-
 require('dotenv').config();
 
 const express = require('express');
@@ -20,7 +19,6 @@ const PORT = process.env.PORT;
 const app = express();
 
 app.use(express.json());
-
 app.use('/members', memberRouter);
 app.use('/api/borrowing', borrowingRoute);
 
@@ -37,5 +35,5 @@ const connectToDB = async (req, res) => {
 connectToDB();
 
 app.listen(PORT, () => {
-   console.log(`Server is running on PORT: ${PORT}`);
+  console.log(`Server is running on PORT: ${PORT}`);
 });
