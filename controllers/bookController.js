@@ -22,7 +22,7 @@ const createBook = async (req, res) => {
          });
       }
       // But if it doesn't exist, create a new one
-      const newBook = await book.create(
+      const newBook = await book.create({
          title,
          author,
          isbn,
@@ -30,7 +30,7 @@ const createBook = async (req, res) => {
          published_year,
          copies_available,
          category_id,
-      );
+      });
       res.status(201).json({
          message: "Book created successfully",
          data: newBook,
@@ -141,10 +141,140 @@ const deleteBook = async (req, res) => {
    }
 };
 
+// Functions for MANAGING books (DECREASED BOOKS & INCREASE BOOKS
+//  & AVAILABLE BOOKS)
+
+// 01. DECREASED BOOKS
+
+// DECREASE THE AVAILABLE BOOK QUANTITY AFTER CHECKING THAT THE BOOK EXISTS AND IS AVAILABLE.
+const decreasingBook = async (req, res) => {
+   try {
+      // RETRIEVING n CHECKING IF THE BOOK EVEN EXIST FIRST
+      let copiesAvailable = 0;
+      const { id } = req.params;
+      const findBook = await book.findByPk(id);
+
+      // IF NO BOOK AVAILABLE, STOP THE REST COMMAND.
+      if (!findBook) {
+         return res.status(404).json({ message: "book not found" });
+      }
+      // BUT IF AVAILABLE, FIND THE AVAILABLE COPIES
+      else {
+         copiesAvailable = findBook.copies_available;
+      }
+
+      // CHECKING IF THE BOOK IS AVAILABLE OR NOT
+      if (copiesAvailable === 0) {
+         return res.status(400).json({
+            message: "not available",
+         });
+
+         // IF BOOK EXIST TAKE OUT AND DECREASE BY 1
+      } else if (copiesAvailable > 0) {
+         copiesAvailable = copiesAvailable - 1;
+
+         // UPDATED BOOK LIBRARY AND UPDATE COPIES_AVAILABLE ATTRIBUTE TO ITS LATEST copiesAvailable
+         await findBook.update({
+            copies_available: copiesAvailable,
+         });
+
+         return res.status(200).json({
+            message: `Book found: The amount of Books left: ${copiesAvailable}`,
+            data: findBook,
+         });
+      }
+   } catch (error) {
+      return res.status(500).json({
+         message: "cant find book ID",
+         error: error.message,
+      });
+   }
+};
+
+// INCREASE AVAILABLE COPIES
+
+// INCREASE THE AVAILABLE BOOK QUANTITY BY ONE.
+const increasingBook = async (req, res) => {
+   try {
+      let copiesAvailable = 0;
+      const { id } = req.params;
+      const findBook = await book.findByPk(id);
+
+      // CHECK IF THE BOOK EXISTS
+      if (!findBook) {
+         return res.status(404).json({
+            message: "book not found",
+         });
+      }
+
+      // BUT IF AVAILABLE, USE THE FINDBOOK WHICH CONTAINS THE ID_TO GO FIND THE COPIES AVAILABLE IN THE copies_available ATTRIBUTE AND SHOW US ITs VALUE
+      copiesAvailable = findBook.copies_available;
+
+      // INCREASE THE AVAILABLE COPIES BY 1
+      copiesAvailable += 1;
+
+      // UPDATE THE BOOK QUANTITY IN THE DATABASE
+      await findBook.update({
+         copies_available: copiesAvailable,
+      });
+
+      return res.status(200).json({
+         message: "Book Updated to library successfully",
+         data: copiesAvailable,
+      });
+   } catch (error) {
+      return res.status(500).json({
+         message: "cant find book ID",
+         error: error.message,
+      });
+   }
+};
+
+// CHECK AVAILABILITY
+const checkBookAvailability = async (req, res) => {
+   try {
+      let copiesAvailable = 0;
+      const { id } = req.params;
+      const findBook = await book.findByPk(id);
+
+      // CHECK IF THE BOOK EXISTS
+      if (!findBook) {
+         return res.status(404).json({
+            message: "book not found",
+         });
+      }
+
+      // RETRIEVE THE AVAILABLE COPIES
+      copiesAvailable = findBook.copies_available;
+
+      // CHECK IF THE BOOK IS AVAILABLE OR NOT
+      if (copiesAvailable > 0) {
+         return res.status(200).json({
+            message: "Book is available",
+            data: copiesAvailable,
+         });
+      } else if (copiesAvailable === 0) {
+         return res.status(200).json({
+            message: "Book is currently unavailable",
+            data: copiesAvailable,
+         });
+      }
+   } catch (error) {
+      return res.status(500).json({
+         message: "cant check book availability",
+         error: error.message,
+      });
+   }
+};
+
 module.exports = {
    createBook,
    getAllBooks,
    getBook,
    updateBook,
    deleteBook,
+
+   checkBookAvailability,
+   increasingBook,
+   decreasingBook,
 };

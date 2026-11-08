@@ -1,15 +1,17 @@
-require("dotenv").config();
-const express = require("express");
-const sequelize = require("./database/database.js");
-const bookRouter = require('./routes/bookRouter.js')
-const PORT = process.env.PORT;
-const joi = require("joi");
+require('dotenv').config();
+const express =require ('express');
+const sequelize = require('./database/database.js')
+const memberRouter = require('./routes/memberRouter.js');
+const bookRouter = require("./routes/bookRouter.js");
+const PORT = process.env.PORT
 
 const app = express();
 
-app.use(express.json());
-
+app.use(express.json())
+app.use('/members', memberRouter);
 app.use(bookRouter);
+
+
 
 
 const connectToDB = async (req, res) => {
